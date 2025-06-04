@@ -2,30 +2,19 @@ import pygame
 import json
 import os
 from Tiling_Management import Block, Tiles
+from Entities import Player
+from conversions import convert_vals_real, convert_vals_virtual
 
 pygame.init()
 
 S_WIDTH, S_HEIGHT = 1300, 700
 SCREEN = pygame.display.set_mode((S_WIDTH, S_HEIGHT))
 FPS = 60
-TILE_SIZE = 70
+with open(os.path.join("global_data", "TILE_SIZE.txt"), 'r') as f:
+    TILE_SIZE = f.read()
 clock = pygame.time.Clock()
-Tile = pygame.transform.scale(pygame.image.load(os.path.join("assets", "tile.png")), (TILE_SIZE, TILE_SIZE))
-
-def convert_vals_real(i, j, z):
-    grid_x = ((i * 1 + j * -1) * TILE_SIZE / 2) - TILE_SIZE /2
-    grid_y = (i * 0.5 + j * 0.5) * TILE_SIZE / 2 - TILE_SIZE/2
-    grid_y -= z * TILE_SIZE / 2 - 1
-    return grid_x, grid_y
-
-def convert_vals_virtual(grid_x, grid_y):
-    gx = grid_x + TILE_SIZE / 2
-    gy = grid_y + TILE_SIZE / 2
-
-    i = (2 * gx + 4 * gy) / (2 * TILE_SIZE)
-    j = (4 * gy - 2 * gx) / (2 * TILE_SIZE)
-
-    return round(i), round(j)
+player = Player()
+Grass_img = pygame.transform.scale(pygame.image.load(os.path.join("assets", "tile.png")), (TILE_SIZE, TILE_SIZE))
 
 def load_map():
     with open('map.json', 'r') as f:
@@ -79,9 +68,9 @@ def draw_map():
 
     for block in tiles.get():
         if hovered_tile == (block.i, block.j, block.z):
-            SCREEN.blit(Tile, (block.grid_x, block.grid_y - hover_offset))
+            SCREEN.blit(Grass_img, (block.grid_x, block.grid_y - hover_offset))
         else:
-            SCREEN.blit(Tile, (block.grid_x, block.grid_y))
+            SCREEN.blit(Grass_img, (block.grid_x, block.grid_y))
     
     return tiles
 
