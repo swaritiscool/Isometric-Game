@@ -98,7 +98,7 @@ def handle_save_to_file(tiles):
         }
 
     with open("map.json", 'w') as f:
-        f.write(str(map))
+        json.dump(map, f, indent=4)
 
     print("Saved Map To File")
 
