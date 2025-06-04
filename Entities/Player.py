@@ -6,6 +6,7 @@ class Player():
         self.money = money
         self.health = health
         self.destination = destination
+        self.mov_opt = []
         """
             Let's keep destination = (i, j, z)
 
@@ -15,6 +16,10 @@ class Player():
             Total 4 blocks around the Player at once...
 
             Based on vertical stuff. If there is something above, you can't see what's below.
+
+            mov_opt is a list of options of blocks it can move.
+            [(i1,j1,z1), (i2,j2,z2)....]
+            4 blocks array to control movement
         """
 
     def move(self, destination: tuple):

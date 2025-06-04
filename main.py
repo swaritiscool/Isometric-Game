@@ -52,16 +52,15 @@ def draw_map():
             lt = list((i, j, z))
             grid_x, grid_y = convert_vals_real(lt[0], lt[1], lt[2])
             grid_x += S_WIDTH // 2
-            grid_y += S_HEIGHT // 2
+            grid_y += S_HEIGHT // 4
 
-            block = Block(tile_data["name"], lt[0], lt[1], lt[2], grid_x, grid_y, tile_data.mov_weight)
+            block = Block(tile_data["name"], lt[0], lt[1], lt[2], grid_x, grid_y, tile_data["mov_weight"])
             tiles.add(block)
 
             tile_rect = pygame.Rect(grid_x, grid_y, TILE_SIZE, TILE_SIZE // 2)
-            tile_positions.append((grid_x, grid_y, tile_rect, i, j))
 
-        if tile_rect.collidepoint(mouse_x, mouse_y):
-            hovered_tile = (i, j, z)
+            if tile_rect.collidepoint(mouse_x, mouse_y):
+                hovered_tile = (i, j, z)
 
     # i is the x pos
     # j is the y pos
@@ -113,6 +112,6 @@ while running:
     key_pressed = pygame.key.get_pressed()
     draw_window()
     tiles = draw_map()
-    if key_pressed[pygame.K_s] and key_pressed[pygame.K_CTRL]:
+    if key_pressed[pygame.K_s] and key_pressed[pygame.K_LCTRL]:
         handle_save_to_file(tiles)
     pygame.display.update()
