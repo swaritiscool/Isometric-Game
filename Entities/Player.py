@@ -7,23 +7,43 @@ class Player():
         self.health = health
         self.destination = destination
         self.mov_opt = []
-        """
-            Let's keep destination = (i, j, z)
 
-            Each block has some weight, so using this weight attribute, we can control.
-            if out character should go on the block next to it or not.
-            
-            Total 4 blocks around the Player at once...
+    def update_movement_options(self, tile_map):
+        directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]  # down, right, up, left
+        self.mov_opt = []
 
-            Based on vertical stuff. If there is something above, you can't see what's below.
+        for di, dj in directions:
+            if self.i < 0:
+                self.i = 0
+            if self.j < 0:
+                self.j = 0
+            ni, nj = self.i + di, self.j + dj
+            key = (ni, nj, self.z)
+            if key in tile_map:
+                block_data = tile_map[key]
+                block_data["mov_weight"] = 1
+                if block_data["mov_weight"] >= 0:
+                    self.mov_opt.append((ni, nj, self.z))
 
-            mov_opt is a list of options of blocks it can move.
-            [(i1,j1,z1), (i2,j2,z2)....]
-            4 blocks array to control movement
-        """
+    def move(self, tile_map):
+        current = (self.i, self.j, self.z)
 
-    def move(self, destination: tuple):
-        """
-            Add code to move the player... will be given the destination
-        """
-        pass
+        if current == self.destination:
+            return
+
+        self.update_movement_options(tile_map)
+
+        dest_i, dest_j, dest_z = self.destination
+        best_next = None
+        min_dist = float('inf')
+
+        for option in self.mov_opt:
+            oi, oj, oz = option
+            dist = abs(dest_i - oi) + abs(dest_j - oj)  # Manhattan distance
+            if dist < min_dist:
+                min_dist = dist
+                best_next = (oi, oj, oz)
+
+        if best_next:
+            self.i, self.j, x = best_next
+            print(f"Moved to {best_next}")

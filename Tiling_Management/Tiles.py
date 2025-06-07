@@ -10,3 +10,14 @@ class Tiles():
 
     def get(self):
         return self.blocks
+
+    def get_dict(self):
+        tile_map = {}
+        for block in self.blocks:
+            key = (block.i, block.j, block.z)
+            tile_map[key] = {
+                "name": block.name,
+                "mov_weight": block.mov_weight,
+                "breakable": block.breakable
+            }
+        return tile_map
